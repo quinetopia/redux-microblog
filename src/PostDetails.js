@@ -15,8 +15,15 @@ function PostDetails() {
 
   const [editClicked, setEditClicked] = useState(false)
   //this would be actual state
-  const INITIAL_STATE = { title: "First post!", description: "The best post ever", body: LOREM_IPSUM }
-  const { title, description, body } = INITIAL_STATE;
+  const INITIAL_STATE = { 
+    title: "First post!", 
+    description: "The best post ever", 
+    body: LOREM_IPSUM, 
+    comments: {id: {text: 'Hey!'}} 
+  }
+  //CALLING USE SELECTOR GRABBING AN ENTIRE POST INCLUDING COMMENTS
+  //maybe delete comments from state when details dismounts
+  const { title, description, body, comments } = INITIAL_STATE;
   const history = useHistory();
 
   function handleDeleteClick() {
@@ -41,7 +48,7 @@ function PostDetails() {
             <h3>{description}</h3>
             <p>{body}</p>
           </div>
-          <Comments id={id} />
+          <Comments comments={comments} id={id} />
         </div>
       )
 

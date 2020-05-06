@@ -26,7 +26,7 @@ function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
    * and update post in database redirect to post 
    * if adding add post to data base redirect to Blog
   */
-  const hanldeSubmit = (evt) =>{
+  const handleSubmit = (evt) =>{
     evt.preventDefault();
     if(id){
       //update state 
@@ -51,7 +51,7 @@ function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
   
   return (
     <div>
-      <form onSubmit={hanldeSubmit}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title</label>
         <input type="text"
           name="title"
