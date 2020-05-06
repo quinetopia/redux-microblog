@@ -7,17 +7,19 @@ import { Link } from "react-router-dom";
  */
 function NavBar() {
 
-  return(
+  return (
     <nav className="navbar navbar-light bg-info">
       <Link to="/" className="navbar-brand text-light">
         Microblog!
       </Link>
-          <Link to="/" className="nav-link text-light">
-            Blog
-          </Link>
-          <Link to="/new" className="nav-link text-light">
-            New post
-          </Link>
+
+      <Link to="/" className="nav-link text-light">
+        Blog
+      </Link>
+      
+      <Link to="/new" className="nav-link text-light">
+        New post
+      </Link>
     </nav>
   );
 }

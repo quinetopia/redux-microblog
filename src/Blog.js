@@ -1,8 +1,14 @@
 import React from "react";
+import PostList from './PostList';
 
-function Blog(){
+/* Blog: shows navBar and renders PostList component */
+function Blog() {
   return (
-  <h1> Blog </h1>
+    <div>
+      <h1> Welcome to Microblog, our innovative site for communicating on the information superhighway </h1>
+      <PostList />
+    </div>
+
   )
 }
 

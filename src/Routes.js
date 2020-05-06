@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Redirect, Route } from "react-router-dom";
 import Blog from "./Blog";
 import NewPostForm from "./NewPostForm";
-import Post from "./Post";
+import PostDetails from "./PostDetails";
 
 /** Routes for application. */
 
@@ -17,7 +17,7 @@ function Routes() {
         <NewPostForm />
       </Route>
       <Route path="/:id" exact>
-        <Post />
+        <PostDetails />
       </Route>
       <Redirect to="/" />
     </Switch>

@@ -8,10 +8,11 @@ import { useHistory } from "react-router-dom";
  * Creates new post for blog.
  * 
  */
-function NewPostForm() {
-  const INITIAL_STATE = { title: "", description: "", body: ""};
-  const [formData, setFormData] = useState(INITIAL_STATE);
+const INITIAL_STATE = { title: "", description: "", body: ""};
+function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
+  const [formData, setFormData] = useState(postDetails);
   const history = useHistory();
+  console.log(id);
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -21,10 +22,30 @@ function NewPostForm() {
     }));
   };
 
+  /**handleSubmit: if editing post set editClicked state to false 
+   * and update post in database redirect to post 
+   * if adding add post to data base redirect to Blog
+  */
   const hanldeSubmit = (evt) =>{
     evt.preventDefault();
-    // save data to state when we know what state is!
-    history.push("/");
+    if(id){
+      //update state 
+      setEditClicked(false)
+    }else{
+      // save data to state when we know what state is!
+      history.push("/");
+    }
+  }
+
+  /**handleCancel: if editing set editClicked state to false 
+   * if adding redirect to Blog
+   */
+  function handleCancel(){
+    if(id){
+      setEditClicked(false)
+    }else{
+      history.push('/');
+    }
   }
 
   
@@ -60,7 +81,7 @@ function NewPostForm() {
         </button>
         
       </form>
-      <button className="NewPostForm-cancel-btn" onClick={()=> history.push("/")} >Cancel</button>
+      <button className="NewPostForm-cancel-btn" onClick={handleCancel} >Cancel</button>
     </div>
   )
 }
