@@ -4,6 +4,9 @@ import Routes from "./Routes"
 
 import './App.css';
 
+/* Renders NavBar and Routes
+*/
+
 function App() {
   return (
     <div className="App">

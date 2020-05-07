@@ -6,17 +6,15 @@ render new comment form*/
 import React from 'react';
 import NewCommentForm from './NewCommentForm';
 
-function Comments ({comments}){
+function Comments ({comments, handleDelete, id}){
 
-  function handleDelete(){
-    console.log('delete this comment');
-  }
+
   return (
     <div>
     <div>
       {Object.keys(comments).map(commentId => 
       <span key={commentId}>{comments[commentId].text}</span>)}
-      <button onClick={handleDelete}>X</button>
+      <button onClick={() => handleDelete(id)}>X</button>
       <br/>
     </div>
         <NewCommentForm />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { LOREM_IPSUM } from "./config"
-import NewPostForm from "./NewPostForm"
+import PostForm from "./PostForm"
 import Comments from './Comments'
 
 
@@ -32,9 +32,14 @@ function PostDetails() {
     history.push("/");
   }
 
+  function handleCommentDelete(id){
+   // dispatch to Thunk actionCreator.
+    console.log('delete this comment');
+  }
+
   function showPostOrEdit() {
     if (editClicked) {
-      return <NewPostForm
+      return <PostForm
         id={id}
         postDetails={INITIAL_STATE}
         setEditClicked={setEditClicked} />
@@ -48,7 +53,7 @@ function PostDetails() {
             <h3>{description}</h3>
             <p>{body}</p>
           </div>
-          <Comments comments={comments} id={id} />
+          <Comments comments={comments} id={id} handleDelete={handleCommentDelete}/>
         </div>
       )
 

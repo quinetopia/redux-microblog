@@ -1,3 +1,8 @@
+/**
+ * CHANGE THE NAME OF ADD_POSTS AND ADD_COMMENTS
+ * TO SOUND LESS LIKE THEY ARE CREATING NEW ENTRIES IN THE DB
+ */
+
 export const ADD_POSTS = "ADD_POSTS";
 // adds all of the posts to state from api
 export const CREATE_POST = "CREATE_POST";

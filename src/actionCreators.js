@@ -21,12 +21,12 @@ export function gotPosts(posts) {
   return { type: ADD_POSTS, posts };
 }
 
-export function createPost(postData) {
-  return { type: CREATE_POST, postData };
+export function createPost(postData, postId) {
+  return { type: CREATE_POST, postData, postId };
 }
 
-export function deletePost(id) {
-  return { type: DELETE_POST, id };
+export function deletePost(postId) {
+  return { type: DELETE_POST, postId };
 }
 
 export function addComments(comments, postId) {
@@ -36,8 +36,9 @@ export function addComments(comments, postId) {
 export function createComment(commentData) {
   return { type: CREATE_COMMENT, commentData };
 }
-export function deleteComment(id) {
-  return { type: DELETE_COMMENT, id};
+
+export function deleteComment(commentId, postId) {
+  return { type: DELETE_COMMENT, commentId, postId};
 }
 
 

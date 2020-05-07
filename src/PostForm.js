@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 // import {useDispatch} from "react-redux";
-// import { v4 as uuid } from 'uuid';
 
 
 /**
@@ -9,7 +8,7 @@ import { useHistory } from "react-router-dom";
  * 
  */
 const INITIAL_STATE = { title: "", description: "", body: ""};
-function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
+function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
   const [formData, setFormData] = useState(postDetails);
   const history = useHistory();
   console.log(id);
@@ -30,9 +29,11 @@ function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
     evt.preventDefault();
     if(id){
       //update state 
+      //call dispatch on thunk actionCreator to update post
       setEditClicked(false)
     }else{
       // save data to state when we know what state is!
+      //call dispatch on thunk actionCreator to create post
       history.push("/");
     }
   }
@@ -76,15 +77,15 @@ function NewPostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
           onChange={handleChange}
         ></input><br/>
 
-        <button className="NewPostForm-submit-btn">
+        <button className="PostForm-submit-btn">
           Save
         </button>
         
       </form>
-      <button className="NewPostForm-cancel-btn" onClick={handleCancel} >Cancel</button>
+      <button className="PostForm-cancel-btn" onClick={handleCancel} >Cancel</button>
     </div>
   )
 }
 
 
-export default NewPostForm;
+export default PostForm;

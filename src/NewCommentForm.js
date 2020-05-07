@@ -1,4 +1,9 @@
+
+
 import React, { useState } from 'react';
+
+/*Allows creation of new comments.
+*/
 
 function NewCommentForm() {
   const inital_comment_state = '';
@@ -11,15 +16,16 @@ function NewCommentForm() {
   function handleSubmit(evt) {
     evt.preventDefault();
     //add formData to higher state {text: formData}
+    //call dispatch on thunk actionCreator 
     setFormData(inital_comment_state);
 
   }
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="text">
+        <label htmlFor="commentText">
           <input type="text"
-            name="text"
+            name="commentText"
             value={formData.text}
             placeholder="New Comment"
             onChange={handleChange}
