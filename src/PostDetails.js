@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom"
-import { LOREM_IPSUM } from "./config"
+// import { LOREM_IPSUM } from "./config"
 import PostForm from "./PostForm"
 import Comments from './Comments'
+import {useDispatch, useSelector, shallowEqual} from "react-redux";
+import { getPostFromAPI } from "./actionCreators";
 
 
 /**
@@ -10,20 +12,17 @@ import Comments from './Comments'
  */
 function PostDetails() {
   const { id } = useParams();
-  // call api to make call to backend for post data from id.
-  // for now use dummy data
 
-  const [editClicked, setEditClicked] = useState(false)
-  //this would be actual state
-  const INITIAL_STATE = { 
-    title: "First post!", 
-    description: "The best post ever", 
-    body: LOREM_IPSUM, 
-    comments: {id: {text: 'Hey!'}} 
-  }
-  //CALLING USE SELECTOR GRABBING AN ENTIRE POST INCLUDING COMMENTS
+  const [editClicked, setEditClicked] = useState(false);
+  const {post, loading } = useSelector(st => ({post: st.posts[id], loading: st.loading}), shallowEqual);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPostFromAPI(id));
+  }, [dispatch, id]);
+
   //maybe delete comments from state when details dismounts
-  const { title, description, body, comments } = INITIAL_STATE;
+  // const { title, description, body, comments } = INITIAL_STATE;
   const history = useHistory();
 
   function handleDeleteClick() {
@@ -41,19 +40,19 @@ function PostDetails() {
     if (editClicked) {
       return <PostForm
         id={id}
-        postDetails={INITIAL_STATE}
+        postDetails={post}
         setEditClicked={setEditClicked} />
     } else {
       return (
         <div>
           <div>
-            <h1>{title}</h1>
+            <h1>{post.title}</h1>
             <button className="Post-edit-btn" onClick={() => setEditClicked(true)}>Edit</button>
             <button className="Post-delete-btn" onClick={handleDeleteClick}>Delete</button>
-            <h3>{description}</h3>
-            <p>{body}</p>
+            <h3>{post.description}</h3>
+            <p>{post.body}</p>
           </div>
-          <Comments comments={comments} id={id} handleDelete={handleCommentDelete}/>
+          <Comments comments={post.comments} id={id} handleDelete={handleCommentDelete}/>
         </div>
       )
 
@@ -65,7 +64,7 @@ function PostDetails() {
 
   return (
     <div>
-      {showPostOrEdit()}
+      {loading ? <p>Loading...</p> : showPostOrEdit()}
     </div>
 
 

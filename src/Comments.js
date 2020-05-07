@@ -6,18 +6,21 @@ render new comment form*/
 import React from 'react';
 import NewCommentForm from './NewCommentForm';
 
-function Comments ({comments, handleDelete, id}){
+function Comments({ comments, handleDelete, id }) {
+  console.log('IN COMMENTS PAGE', comments)
 
+  //handle when there are no comments and comments is undefined use loading
 
   return (
     <div>
-    <div>
-      {Object.keys(comments).map(commentId => 
-      <span key={commentId}>{comments[commentId].text}</span>)}
-      <button onClick={() => handleDelete(id)}>X</button>
-      <br/>
-    </div>
-        <NewCommentForm />
+      <div>
+        {Object.entries(comments).map(([commentId, commentData]) =>
+          (<div key={commentId}>
+            <span>{commentData.text}</span>
+            <button onClick={() => handleDelete(id)}>X</button>
+          </div>))}
+      </div>
+      <NewCommentForm />
     </div>
   )
 }

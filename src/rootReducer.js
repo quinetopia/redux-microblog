@@ -1,30 +1,31 @@
 import { 
-  ADD_POSTS, 
+  IS_LOADING,
+  GET_POSTS, 
+  GET_POST,
   CREATE_POST, 
   DELETE_POST, 
-  ADD_COMMENTS, 
+  // GET_COMMENTS, 
   CREATE_COMMENT, 
   DELETE_COMMENT 
-  // SHOW_ERR, 
-  // SHOW_SPINNER
+  // SHOW_ERR
 } from "./actionTypes";
 
 const DEFAULT_STATE = {
-  posts:
-  {
-    uniquePostId:{
-      title: "", 
-      description: "", 
-      body: "", 
-      comments: {
-        uniqueCommentId: {
-          text: "" 
-        } 
-      } 
-    }
-  },
+  posts:{},
+  // {
+  //   uniquePostId:{
+  //     title: "", 
+  //     description: "", 
+  //     body: "", 
+  //     comments: {
+  //       uniqueCommentId: {
+  //         commentText: "" 
+  //       } 
+  //     } 
+  //   }
+  // },
   error: "",
-  loading: false
+  loading: true
 };
 
 /**
@@ -33,6 +34,10 @@ const DEFAULT_STATE = {
  */
 function rootReducer(state = DEFAULT_STATE, action) {
   switch (action.type) {
+
+    //changes loading to true in state
+    case IS_LOADING:
+      return { ...state, loading: true };
 
     //puts a new post in state after entry in backend db
     case CREATE_POST: 
@@ -45,9 +50,9 @@ function rootReducer(state = DEFAULT_STATE, action) {
         posts:{
           ...state.posts, 
           [action.postId]:{
-            ...state.posts[action.postID],
+            ...state.posts[action.postId],
             comments:{
-              ...state.posts[action.postID].comments, 
+              ...state.posts[action.postId].comments, 
               [action.commentId]: action.commentData
             }
           }
@@ -55,21 +60,36 @@ function rootReducer(state = DEFAULT_STATE, action) {
       };
     
     // Updates posts in state with new data from backend db
-    case ADD_POSTS:
-      return {...state, posts: action.postData}
+    case GET_POSTS:
+      return {...state, posts: action.postData, loading: false}
 
-    // Updates comments for a specific post in state with new data from backend db
-    case ADD_COMMENTS:
+    case GET_POST:
       return {
         ...state, 
-        posts: {
+        loading: false,
+        posts:{
           ...state.posts, 
           [action.postId]:{
-            ...state.posts[action.postId],
-            comments: action.comments
+            ...action.postData,
+            comments:{
+              ...action.postData.comments
+            }
           }
         }
-      };
+      }
+
+    // Updates comments for a specific post in state with new data from backend db
+    // case GET_COMMENTS:
+    //   return {
+    //     ...state, 
+    //     posts: {
+    //       ...state.posts, 
+    //       [action.postId]:{
+    //         ...state.posts[action.postId],
+    //         comments: action.comments
+    //       }
+    //     }
+    //   };
 
     //deletes post from state after deletion from backend db
     case DELETE_POST:

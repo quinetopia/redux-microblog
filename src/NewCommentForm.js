@@ -15,7 +15,7 @@ function NewCommentForm() {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    //add formData to higher state {text: formData}
+    //add formData to higher state {commentText: formData}
     //call dispatch on thunk actionCreator 
     setFormData(inital_comment_state);
 

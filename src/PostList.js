@@ -1,26 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PostCard from './PostCard.js';
-import { LOREM_IPSUM } from "./config"
+import {useDispatch, useSelector, shallowEqual} from "react-redux";
+import { getPostsFromAPI } from "./actionCreators";
 
-// look up Object.entries instead of Object.keys
 
 function PostList(){
-  //DISPATCH a thunk action which would make an api call to get the posts
-  //USESELECTOR GRABS ALL POSTS 
-  
-  const postList = {
-    'uniqueId': { title: "First post!", description: "The best post ever", body: LOREM_IPSUM, comments: {commentId: {text: ''}} }
-  }
+  const posts = useSelector(st => st.posts, shallowEqual);
+  console.log('POSTLIST STATE', posts);
+  // const error = useSelector(st => st.error);
+  const dispatch = useDispatch();
+  // const postList = {
+  //   'uniqueId': { title: "First post!", description: "The best post ever", body: LOREM_IPSUM, comments: {commentId: {text: ''}} }
+  // }
 
+  useEffect(() => {
+    dispatch(getPostsFromAPI());
+  }, [dispatch]);
 
 
   return(
     <div>
-      {Object.keys(postList).map(key => (
+      {Object.entries(posts).map(([postId, postDetails]) => (
       <PostCard 
-      key={key}
-      id={key}
-      postDetails={postList[key]}
+      key={postId}
+      id={postId}
+      postDetails={postDetails}
       />))}
     </div>
   )
