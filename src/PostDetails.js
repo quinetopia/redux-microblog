@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom"
 import PostForm from "./PostForm"
 import Comments from './Comments'
 import {useDispatch, useSelector, shallowEqual} from "react-redux";
-import { getPostFromAPI } from "./actionCreators";
+import { getPostFromAPI, deleteCommentFromAPI, deletePostFromAPI } from "./actionCreators";
 
 
 /**
@@ -17,25 +17,26 @@ function PostDetails() {
   const {post, loading } = useSelector(st => ({post: st.posts[id], loading: st.loading}), shallowEqual);
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     dispatch(getPostFromAPI(id));
   }, [dispatch, id]);
 
-  //maybe delete comments from state when details dismounts
-  // const { title, description, body, comments } = INITIAL_STATE;
+
   const history = useHistory();
 
+  // Delete post and redirect to home page
   function handleDeleteClick() {
-    //assume we will be calling on a delete function from actions.
-    //for now:
+    dispatch(deletePostFromAPI(id));
     history.push("/");
   }
 
-  function handleCommentDelete(id){
-   // dispatch to Thunk actionCreator.
-    console.log('delete this comment');
+  // Pass down function for deleting comments
+  function handleCommentDelete(commentId){
+   dispatch(deleteCommentFromAPI(commentId, id));
   }
 
+  // Returns appropriate JSX depending on if editing or viewing
   function showPostOrEdit() {
     if (editClicked) {
       return <PostForm
@@ -52,14 +53,16 @@ function PostDetails() {
             <h3>{post.description}</h3>
             <p>{post.body}</p>
           </div>
-          <Comments comments={post.comments} id={id} handleDelete={handleCommentDelete}/>
-        </div>
+          {post.comments ?
+            <Comments comments={post.comments} postId={id} handleDelete={handleCommentDelete}/>
+          :
+          ""
+          }
+          </div>
       )
 
     }
   }
-
-
 
 
   return (

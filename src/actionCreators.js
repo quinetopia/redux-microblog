@@ -1,12 +1,14 @@
 import axios from 'axios';
-import { structurePostsData, structurePostData } from './helpers';
+import { structurePostsData, 
+          structurePostData, 
+          structureUpdatedPostData } from './helpers';
 import { 
   IS_LOADING,
   GET_POSTS, 
   GET_POST,
   CREATE_POST, 
   DELETE_POST, 
-  // GET_COMMENTS, 
+  UPDATE_POST,
   CREATE_COMMENT, 
   DELETE_COMMENT, 
   SHOW_ERR
@@ -29,26 +31,28 @@ export function gotPost(postData, postId) {
   return { type: GET_POST, postData, postId};
 }
 
-export function createPost(postData) {
-  return { type: CREATE_POST, postData };
+export function createdPost(postData, postId) {
+  console.log("createdPosts. postData:", postData, "postId", postId);
+  return { type: CREATE_POST, postData, postId };
 }
 
-export function deletePost(postId) {
+export function deletedPost(postId) {
   return { type: DELETE_POST, postId };
 }
 
-// export function gotComments(comments, postId) {
-//   return { type: GET_COMMENTS, comments, postId };
-// }
-
-export function createComment(commentData) {
-  return { type: CREATE_COMMENT, commentData };
+export function updatedPost(postData, postId ) {
+  return { type: UPDATE_POST, postData, postId };
 }
 
-export function deleteComment(commentId, postId) {
+export function createdComment(commentText, commentId, postId) {
+  return { type: CREATE_COMMENT, commentText, commentId, postId };
+}
+
+export function deletedComment(commentId, postId) {
   return { type: DELETE_COMMENT, commentId, postId};
 }
 
+//Makes API callfor all posts data and dispatches action to rootReducer
 export function getPostsFromAPI() {
   return async function(dispatch) {
     dispatch(startLoad());
@@ -64,6 +68,7 @@ export function getPostsFromAPI() {
   }
 }
 
+//Makes API callfor a single post's data and dispatches action to rootReducer
 export function getPostFromAPI(postId) {
   return async function(dispatch) {
     dispatch(startLoad());
@@ -79,3 +84,80 @@ export function getPostFromAPI(postId) {
   }
 }
 
+//Makes API post request to create a new post on the backend and dispatches to
+// rootReducer to update state
+export function createPostWithAPI({title, description, body}) {
+  return async function(dispatch) {
+
+    try {
+      let res = await axios.post(`${API_URL}/posts/`, {title, description, body});
+      console.log("createPostWithAPI: ", res.data )
+      console.log(structurePostData(res.data));
+      dispatch(createdPost(structurePostData(res.data), res.data.postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}
+
+//Makes API post request to create a new comment on the backend and dispatches to
+// rootReducer to update state
+export function createCommentWithAPI({text}, postId) {
+  return async function(dispatch) {
+
+    try {
+      let res = await axios.post(`${API_URL}/posts/${postId}/comments`, { text });
+      dispatch(createdComment( res.data.text, res.data.id, postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}
+
+//Makes API delete request to delete a comment on the backend and dispatches to
+// rootReducer to update state
+export function deleteCommentFromAPI(commentId, postId) {
+  return async function(dispatch) {
+
+    try {
+        await axios.delete(`${API_URL}/posts/${postId}/comments/${commentId}`);
+        dispatch(deletedComment(commentId, postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}
+
+//Makes API delete request to delete a post on the backend and dispatches to
+// rootReducer to update state
+export function deletePostFromAPI(postId) {
+  return async function(dispatch) {
+
+    try {
+        await axios.delete(`${API_URL}/posts/${postId}/`);
+        dispatch(deletedPost(postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}
+
+//Makes API put request to update a post on the backend and dispatches to
+// rootReducer to update state
+export function UpdatePostWithAPI(postData, postId) {
+  return async function(dispatch) {
+    console.log("UpdatePostWithAPI, postData: ", postData, "postId: ", postId);
+    try {
+        let res = await axios.put(`${API_URL}/posts/${postId}/`, postData);
+        console.log(structureUpdatedPostData(res.data))
+        dispatch(updatedPost(structureUpdatedPostData(res.data), postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}

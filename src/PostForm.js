@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-// import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
+import { createPostWithAPI, UpdatePostWithAPI } from "./actionCreators"
 
 
 /**
  * Creates new post for blog.
  * 
  */
-const INITIAL_STATE = { title: "", description: "", body: ""};
-function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
+const INITIAL_STATE = { title: "", description: "", body: "" };
+function PostForm({ id, postDetails = INITIAL_STATE, setEditClicked }) {
   const [formData, setFormData] = useState(postDetails);
   const history = useHistory();
-  console.log(id);
+  const dispatch = useDispatch();
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -25,15 +26,18 @@ function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
    * and update post in database redirect to post 
    * if adding add post to data base redirect to Blog
   */
-  const handleSubmit = (evt) =>{
+  const handleSubmit = (evt) => {
     evt.preventDefault();
-    if(id){
-      //update state 
-      //call dispatch on thunk actionCreator to update post
+    if (id) {
+      let updateData = {
+        title: formData.title,
+        description: formData.description,
+        body: formData.body
+      }
+      dispatch(UpdatePostWithAPI(updateData, id))
       setEditClicked(false)
-    }else{
-      // save data to state when we know what state is!
-      //call dispatch on thunk actionCreator to create post
+    } else {
+      dispatch(createPostWithAPI(formData))
       history.push("/");
     }
   }
@@ -41,15 +45,15 @@ function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
   /**handleCancel: if editing set editClicked state to false 
    * if adding redirect to Blog
    */
-  function handleCancel(){
-    if(id){
+  function handleCancel() {
+    if (id) {
       setEditClicked(false)
-    }else{
+    } else {
       history.push('/');
     }
   }
 
-  
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -59,7 +63,7 @@ function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
           value={formData.title}
           placeholder=""
           onChange={handleChange}
-        ></input><br/>
+        ></input><br />
 
         <label htmlFor="description">Description</label>
         <input type="text"
@@ -67,7 +71,7 @@ function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
           value={formData.description}
           placeholder=""
           onChange={handleChange}
-        ></input><br/>
+        ></input><br />
 
         <label htmlFor="body">Body</label>
         <input type="text"
@@ -75,12 +79,12 @@ function PostForm({id, postDetails=INITIAL_STATE, setEditClicked}) {
           value={formData.body}
           placeholder=""
           onChange={handleChange}
-        ></input><br/>
+        ></input><br />
 
         <button className="PostForm-submit-btn">
           Save
         </button>
-        
+
       </form>
       <button className="PostForm-cancel-btn" onClick={handleCancel} >Cancel</button>
     </div>

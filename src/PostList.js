@@ -4,14 +4,11 @@ import {useDispatch, useSelector, shallowEqual} from "react-redux";
 import { getPostsFromAPI } from "./actionCreators";
 
 
+// Makes call to db to get brief version of posts and lists them 
 function PostList(){
   const posts = useSelector(st => st.posts, shallowEqual);
-  console.log('POSTLIST STATE', posts);
-  // const error = useSelector(st => st.error);
   const dispatch = useDispatch();
-  // const postList = {
-  //   'uniqueId': { title: "First post!", description: "The best post ever", body: LOREM_IPSUM, comments: {commentId: {text: ''}} }
-  // }
+
 
   useEffect(() => {
     dispatch(getPostsFromAPI());
