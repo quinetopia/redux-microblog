@@ -29,6 +29,7 @@ export function startLoad() {
   return { type: IS_LOADING };
 }
 
+// TODO postId here should be superfluous. 
 export function gotPosts(postsData, postId) {
   return { type: GET_POSTS, postsData, postId};
 }
