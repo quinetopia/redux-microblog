@@ -1,4 +1,5 @@
 
+
 // Structures data to make it easy to use in rootReducer
 export function structurePostsData(postsApiData) {
   const stateData = {};

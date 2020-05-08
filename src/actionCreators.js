@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { structurePostsData, 
           structurePostData, 
-          structureUpdatedPostData } from './helpers';
+          structureUpdatedPostData } from './dataRestructurers';
 import { 
   IS_LOADING,
   GET_POSTS, 
@@ -11,6 +11,7 @@ import {
   UPDATE_POST,
   CREATE_COMMENT, 
   DELETE_COMMENT, 
+  UPDATE_VOTES,
   SHOW_ERR
 } from "./actionTypes";
 import { API_URL } from './config';
@@ -23,8 +24,8 @@ export function startLoad() {
   return { type: IS_LOADING };
 }
 
-export function gotPosts(postData, postId) {
-  return { type: GET_POSTS, postData, postId};
+export function gotPosts(postsData, postId) {
+  return { type: GET_POSTS, postsData, postId};
 }
 
 export function gotPost(postData, postId) {
@@ -32,7 +33,6 @@ export function gotPost(postData, postId) {
 }
 
 export function createdPost(postData, postId) {
-  console.log("createdPosts. postData:", postData, "postId", postId);
   return { type: CREATE_POST, postData, postId };
 }
 
@@ -50,6 +50,10 @@ export function createdComment(commentText, commentId, postId) {
 
 export function deletedComment(commentId, postId) {
   return { type: DELETE_COMMENT, commentId, postId};
+}
+
+export function updateVotes(postId, votes) {
+  return { type: UPDATE_VOTES, postId, votes};
 }
 
 //Makes API callfor all posts data and dispatches action to rootReducer
@@ -91,8 +95,6 @@ export function createPostWithAPI({title, description, body}) {
 
     try {
       let res = await axios.post(`${API_URL}/posts/`, {title, description, body});
-      console.log("createPostWithAPI: ", res.data )
-      console.log(structurePostData(res.data));
       dispatch(createdPost(structurePostData(res.data), res.data.postId));
     }
     catch(err) {
@@ -148,13 +150,25 @@ export function deletePostFromAPI(postId) {
 
 //Makes API put request to update a post on the backend and dispatches to
 // rootReducer to update state
-export function UpdatePostWithAPI(postData, postId) {
+export function updatePostWithAPI(postData, postId) {
   return async function(dispatch) {
     console.log("UpdatePostWithAPI, postData: ", postData, "postId: ", postId);
     try {
         let res = await axios.put(`${API_URL}/posts/${postId}/`, postData);
         console.log(structureUpdatedPostData(res.data))
         dispatch(updatedPost(structureUpdatedPostData(res.data), postId));
+    }
+    catch(err) {
+      dispatch(showErr(err.response.data));
+    }
+  }
+}
+
+export function updateVotesWithAPI(postId, direction) {
+  return async function(dispatch) {
+    try {
+        let res = await axios.post(`${API_URL}/posts/${postId}/vote/${direction}`);
+        dispatch(updateVotes(postId, res.data.votes));
     }
     catch(err) {
       dispatch(showErr(err.response.data));

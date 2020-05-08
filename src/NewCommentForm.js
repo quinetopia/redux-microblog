@@ -32,7 +32,7 @@ function NewCommentForm({ postId }) {
             value={formData}
             placeholder="New Comment"
             onChange={handleChange}
-          ></input>
+          />
         </label>
         <button>Add</button>
       </form>

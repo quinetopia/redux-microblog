@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createPostWithAPI, UpdatePostWithAPI } from "./actionCreators"
+import { createPostWithAPI, updatePostWithAPI } from "./actionCreators"
 
 
 /**
@@ -34,7 +34,7 @@ function PostForm({ id, postDetails = INITIAL_STATE, setEditClicked }) {
         description: formData.description,
         body: formData.body
       }
-      dispatch(UpdatePostWithAPI(updateData, id))
+      dispatch(updatePostWithAPI(updateData, id))
       setEditClicked(false)
     } else {
       dispatch(createPostWithAPI(formData))

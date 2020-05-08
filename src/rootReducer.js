@@ -6,7 +6,8 @@ import {
   DELETE_POST,
   UPDATE_POST,
   CREATE_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  UPDATE_VOTES
   // SHOW_ERR
 } from "./actionTypes";
 
@@ -50,8 +51,10 @@ function rootReducer(state = DEFAULT_STATE, action) {
 
     // Updates posts in state with new data from backend db
     case GET_POSTS:
-      return { ...state, posts: action.postData, loading: false }
+      return { ...state, posts: action.postsData, loading: false }
 
+    // Updates posts in state with new detailed data from backend db
+    // including body and comments
     case GET_POST:
       return {
         ...state,
@@ -100,6 +103,18 @@ function rootReducer(state = DEFAULT_STATE, action) {
           [action.postId]: {
             ...state.posts[action.postId],
             comments: newComments
+          }
+        }
+      };
+
+    case UPDATE_VOTES:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...state.posts[action.postId],
+            votes: action.votes
           }
         }
       };

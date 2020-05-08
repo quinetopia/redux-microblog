@@ -14,8 +14,8 @@ export const CREATE_COMMENT = "CREATE_COMMENT";
 // adds a comment to state and backend
 export const DELETE_COMMENT = "DELETE_COMMENT";
 // deletes a comment from state and api
-
-
+export const UPDATE_VOTES = "UPDATE_VOTES";
+// updates votes in state and api
 export const SHOW_ERR = "SHOW_ERR";
 
 
