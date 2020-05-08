@@ -26,8 +26,3 @@ function Comments({ comments, handleDelete, postId }) {
 }
 
 export default Comments;
-
-
-
-
-//sort this array by id
