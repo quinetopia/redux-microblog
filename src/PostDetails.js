@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams, Redirect } from "react-router-dom"
 // import { LOREM_IPSUM } from "./config"
 import PostForm from "./PostForm"
 import Comments from './Comments'
@@ -19,10 +19,9 @@ function PostDetails() {
   const { id } = useParams();
 
   const [editClicked, setEditClicked] = useState(false);
-  const { post, loading } = useSelector(st => ({ post: st.posts[id], loading: st.loading }), shallowEqual);
+  const { post, loading, error } = useSelector(st => ({ post: st.posts[id], loading: st.loading, error: st.error }), shallowEqual);
   const dispatch = useDispatch();
   const history = useHistory();
-  // const changeVotes = useChangeVotes();
 
 
   // Pull in all post details on component mount
@@ -38,19 +37,6 @@ function PostDetails() {
     history.push("/");
   }
 
-  // function handleUpVote(){
-  //   changeVotes(id, "up");
-  // }
-
-  // function handleDownVote(){
-  //   changeVotes(id, "down");
-  // }
-
-    // Passed down to PostCard.  dispatches post request
-  // to API and updates backend with new vote
-  // function handleVotes(postId, direction) {
-  //   dispatch(updateVotesWithAPI(postId, direction));
-  // }
 
   // Pass down function for deleting comments
   function handleCommentDelete(commentId) {
@@ -93,7 +79,14 @@ function PostDetails() {
 
   return (
     <div>
-      {loading ? <p>Loading...</p> : showPostOrEdit()}
+      {
+      error ? 
+      <Redirect to="/" /> 
+      :loading 
+        ? 
+        <p>Loading...</p> 
+        : showPostOrEdit()
+      }
     </div>
 
 

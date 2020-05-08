@@ -7,13 +7,14 @@ import {
   UPDATE_POST,
   CREATE_COMMENT,
   DELETE_COMMENT,
-  UPDATE_VOTES
-  // SHOW_ERR
+  UPDATE_VOTES,
+  SHOW_ERR,
+  CLEAR_ERR
 } from "./actionTypes";
 
 const DEFAULT_STATE = {
   posts: {},
-  error: "",
+  error: null,
   loading: true
 };
 
@@ -23,6 +24,17 @@ const DEFAULT_STATE = {
  */
 function rootReducer(state = DEFAULT_STATE, action) {
   switch (action.type) {
+
+    case SHOW_ERR:
+      return {
+        ...state, 
+        error: action.msg
+      }
+    case CLEAR_ERR:
+      return {
+        ...state,
+        error: null
+      }
 
     //changes loading to true in state
     case IS_LOADING:

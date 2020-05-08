@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import PostCard from './PostCard.js';
 import {useDispatch, useSelector, shallowEqual} from "react-redux";
-import { getPostsFromAPI } from "./actionCreators";
+import { getPostsFromAPI, clearErr } from "./actionCreators";
 import changeVotes from "./changeVotes"
 
 
@@ -12,7 +12,9 @@ function PostList(){
   const dispatch = useDispatch();
 
   // Pull in brief details on all posts on component mount
+  // clear error in state
   useEffect(() => {
+    dispatch(clearErr());
     dispatch(getPostsFromAPI());
   }, [dispatch]);
 

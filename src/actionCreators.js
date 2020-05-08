@@ -12,12 +12,17 @@ import {
   CREATE_COMMENT, 
   DELETE_COMMENT, 
   UPDATE_VOTES,
-  SHOW_ERR
+  SHOW_ERR,
+  CLEAR_ERR
 } from "./actionTypes";
 import { API_URL } from './config';
 
 export function showErr(msg) {
   return { type: SHOW_ERR, msg };
+}
+
+export function clearErr() {
+  return { type: CLEAR_ERR };
 }
 
 export function startLoad() {
@@ -79,11 +84,14 @@ export function getPostFromAPI(postId) {
 
     try {
       let res = await axios.get(`${API_URL}/posts/${postId}`);
-      dispatch(gotPost(structurePostData(res.data), postId));
+      if(res.headers['content-length'] !== '0'){
+        dispatch(gotPost(structurePostData(res.data), postId));
+      }else{
+        dispatch(showErr('post does not exist'));
+      }
     }
-
     catch(err) {
-      dispatch(showErr(err.response.data));
+      dispatch(showErr(err.response.data))
     }
   }
 }

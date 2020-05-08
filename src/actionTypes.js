@@ -17,5 +17,8 @@ export const DELETE_COMMENT = "DELETE_COMMENT";
 export const UPDATE_VOTES = "UPDATE_VOTES";
 // updates votes in state and api
 export const SHOW_ERR = "SHOW_ERR";
+// updates error in state to a message
+export const CLEAR_ERR = "CLEAR_ERR";
+// updates error in state to null
 
 
